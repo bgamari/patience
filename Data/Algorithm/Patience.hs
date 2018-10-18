@@ -11,11 +11,12 @@ module Data.Algorithm.Patience
     -- * Longest increasing subsequence
   , longestIncreasing
   ) where
-import qualified Data.Sequence as S
+import qualified Data.Sequence   as S
 import Data.Sequence ( (<|), (|>), (><), ViewL(..), ViewR(..) )
-import qualified Data.Foldable as F
-import qualified Data.Map      as M
-import qualified Data.IntMap   as IM
+import qualified Data.Foldable   as F
+import qualified Data.Map        as M
+import qualified Data.Map.Strict as M.Strict
+import qualified Data.IntMap     as IM
 
 import Data.List
 import Data.Ord
@@ -68,7 +69,7 @@ longestIncreasing = extract . foldl' ins IM.empty where
 -- Elements whose second component appears exactly once.
 unique :: (Ord t) => S.Seq (a,t) -> M.Map t a
 unique = M.mapMaybe id . F.foldr ins M.empty where
-  ins (a,x) = M.insertWith' (\_ _ -> Nothing) x (Just a)
+  ins (a,x) = M.Strict.insertWith (\_ _ -> Nothing) x (Just a)
 
 -- Given two sequences of numbered "lines", returns a list of points
 -- where unique lines match up.
